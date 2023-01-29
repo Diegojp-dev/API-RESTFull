@@ -40,7 +40,7 @@ public class PersonService {
         if(vo == null) throw new RequireObjectIsNullException();
         Person entity = DozerMapper.parseObject(vo,Person.class);
         vo = DozerMapper.parseObject(repository.save(entity),PersonVO.class);
-        vo.add(linkTo(methodOn(PersonController.class)).withSelfRel());
+        vo.add(linkTo(methodOn(PersonController.class).findById(vo.getKey())).withSelfRel());
         return vo;
     }
 

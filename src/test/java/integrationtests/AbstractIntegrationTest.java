@@ -1,6 +1,6 @@
 package integrationtests;
 
-import org.hibernate.sql.results.graph.Initializer;
+
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.ConfigurableEnvironment;
@@ -15,9 +15,9 @@ import java.util.stream.Stream;
 @ContextConfiguration(initializers = AbstractIntegrationTest.Initializer.class)
 public class AbstractIntegrationTest {
 
-    public class Initializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
+    public static class Initializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
 
-        static MySQLContainer<?> mysql = new MySQLContainer<>("mysql:8.0.32");
+        static MySQLContainer<?> mysql = new MySQLContainer<>("mysql:8.0.29");
 
         private static void startContainers(){
             Startables.deepStart(Stream.of(mysql)).join();
@@ -35,6 +35,7 @@ public class AbstractIntegrationTest {
             startContainers();
             ConfigurableEnvironment environment = applicationContext.getEnvironment();
             MapPropertySource testcontainers = new MapPropertySource("testcontainers", (Map) createConnectionConfiguration());
+            environment.getPropertySources().addFirst(testcontainers);
         }
 
 
